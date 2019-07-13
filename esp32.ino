@@ -17,6 +17,7 @@ WebServer server(80);
 
 OIMessage msg;
 LedColor led = LED_NONE;
+bool stor[4] = {LOW, LOW, LOW, LOW};
 
 void setup() {
   Serial.begin(115200);
@@ -34,6 +35,14 @@ void setup() {
   server.on("/led/purple", handle_led_purple);
   server.on("/led/cyan", handle_led_cyan);
   server.on("/led/white", handle_led_white);
+  server.on("/stor1/low", handle_stor1_low);
+  server.on("/stor1/high", handle_stor1_high);
+  server.on("/stor2/low", handle_stor2_low);
+  server.on("/stor2/high", handle_stor2_high);
+  server.on("/stor3/low", handle_stor3_low);
+  server.on("/stor3/high", handle_stor3_high);
+  server.on("/stor4/low", handle_stor4_low);
+  server.on("/stor4/high", handle_stor4_high);
   server.onNotFound(handle_NotFound);
   
   server.begin();
@@ -45,91 +54,184 @@ void loop() {
 
 void handle_OnConnect() {
   Serial.println("Led color: NONE");
-  server.send(200, "text/html", SendHTML(LED_NONE)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_none() {
   led = LED_NONE;
   Serial.println("Led color: NONE");
-  server.send(200, "text/html", SendHTML(LED_NONE)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_red() {
   led = LED_RED;
   Serial.println("Led color: RED");
-  server.send(200, "text/html", SendHTML(LED_RED)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_green() {
   led = LED_GREEN;
   Serial.println("Led color: GREEN");
-  server.send(200, "text/html", SendHTML(LED_GREEN)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_yellow() {
   led = LED_YELLOW;
   Serial.println("Led color: YELLOW");
-  server.send(200, "text/html", SendHTML(LED_YELLOW)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_blue() {
   led = LED_BLUE;
   Serial.println("Led color: BLUE");
-  server.send(200, "text/html", SendHTML(LED_BLUE)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_purple() {
   led = LED_PURPLE;
   Serial.println("Led color: PURPLE");
-  server.send(200, "text/html", SendHTML(LED_PURPLE)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_cyan() {
   led = LED_CYAN;
   Serial.println("Led color: CYAN");
-  server.send(200, "text/html", SendHTML(LED_CYAN)); 
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_led_white() {
   led = LED_WHITE;
   Serial.println("Led color: WHITE");
-  server.send(200, "text/html", SendHTML(LED_WHITE)); 
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor1_low() {
+  stor[0] = LOW;
+  Serial.println("stor1 state: LOW");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor1_high() {
+  stor[0] = HIGH;
+  Serial.println("stor1 state: HIGH");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor2_low() {
+  stor[1] = LOW;
+  Serial.println("stor2 state: LOW");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor2_high() {
+  stor[1] = HIGH;
+  Serial.println("stor2 state: HIGH");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor3_low() {
+  stor[2] = LOW;
+  Serial.println("stor3 state: LOW");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor3_high() {
+  stor[2] = HIGH;
+  Serial.println("stor3 state: HIGH");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor4_low() {
+  stor[3] = LOW;
+  Serial.println("stor4 state: LOW");
+  server.send(200, "text/html", SendHTML()); 
+}
+
+void handle_stor4_high() {
+  stor[3] = HIGH;
+  Serial.println("stor4 state: HIGH");
+  server.send(200, "text/html", SendHTML()); 
 }
 
 void handle_NotFound(){
   server.send(404, "text/plain", "Not found");
 }
 
-String SendHTML(LedColor ledColor){
+String SendHTML(){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head>\n";
+  ptr += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr += "<title>OICore ESP32 Web Server</title>\n";
+  
+  ptr += "<style>\n";
+  ptr += "html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr += "body{margin-top: 50px;}\n";
+  ptr += "h1 {color: #444444;margin: 50px auto 30px;}\n";
+  ptr += "h3 {color: #444444;margin-bottom: 50px;}\n";
+  ptr += "p {font-size: 14px;color: #444444;margin-bottom: 10px;}\n";
+  ptr += "table {margin: auto;}\n";
+  
+  ptr += "</style>\n";
   ptr += "</head>\n";
+
   ptr += "<body>\n";
   ptr += "<h1>OICore ESP32 Web Server</h1>\n";
 
-  ptr += "<table>\n";
-  ptr += "<tr><td>LED</td>\n";
+  ptr += "<table>\n";  
+  ptr += "<tr><td><p>LED<p></td>\n";
   ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n";
-  if (ledColor == LED_NONE) ptr += "<option value=\"/led/none\" selected>NONE</option>\n";
+  if (led == LED_NONE) ptr += "<option value=\"/led/none\" selected>NONE</option>\n";
   else ptr += "<option value=\"/led/none\">NONE</option>\n";  
-  if (ledColor == LED_RED) ptr += "<option value=\"/led/red\" selected>RED</option>\n";
+  if (led == LED_RED) ptr += "<option value=\"/led/red\" selected>RED</option>\n";
   else ptr += "<option value=\"/led/red\">RED</option>\n";  
-  if (ledColor == LED_GREEN) ptr += "<option value=\"/led/green\" selected>GREEN</option>\n";
+  if (led == LED_GREEN) ptr += "<option value=\"/led/green\" selected>GREEN</option>\n";
   else ptr += "<option value=\"/led/green\">GREEN</option>\n";  
-  if (ledColor == LED_YELLOW) ptr += "<option value=\"/led/yellow\" selected>YELLOW</option>\n";
+  if (led == LED_YELLOW) ptr += "<option value=\"/led/yellow\" selected>YELLOW</option>\n";
   else ptr += "<option value=\"/led/yellow\">YELLOW</option>\n";  
-  if (ledColor == LED_BLUE) ptr += "<option value=\"/led/blue\" selected>BLUE</option>\n";
+  if (led == LED_BLUE) ptr += "<option value=\"/led/blue\" selected>BLUE</option>\n";
   else ptr += "<option value=\"/led/blue\">BLUE</option>\n";  
-  if (ledColor == LED_PURPLE) ptr += "<option value=\"/led/purple\" selected>PURPLE</option>\n";
+  if (led == LED_PURPLE) ptr += "<option value=\"/led/purple\" selected>PURPLE</option>\n";
   else ptr += "<option value=\"/led/purple\">PURPLE</option>\n";  
-  if (ledColor == LED_CYAN) ptr += "<option value=\"/led/cyan\" selected>CYAN</option>\n";
+  if (led == LED_CYAN) ptr += "<option value=\"/led/cyan\" selected>CYAN</option>\n";
   else ptr += "<option value=\"/led/cyan\">CYAN</option>\n";  
-  if (ledColor == LED_WHITE) ptr += "<option value=\"/led/white\" selected>WHITE</option>\n";
+  if (led == LED_WHITE) ptr += "<option value=\"/led/white\" selected>WHITE</option>\n";
   else ptr += "<option value=\"/led/white\">WHITE</option>\n";
   ptr += "</select></td></tr>\n";
-  ptr += "</table>\n";
   
-  ptr +="</body>\n";
-  ptr +="</html>\n";
+  ptr += "<tr><td><p>STOR 1<p></td>\n";
+  ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n";
+  if (stor[0] == HIGH) ptr += "<option value=\"/stor1/high\" selected>HIGH</option>\n";
+  else ptr += "<option value=\"/stor1/high\">HIGH</option>\n";
+  if (stor[0] == LOW) ptr += "<option value=\"/stor1/low\" selected>LOW</option>\n";
+  else ptr += "<option value=\"/stor1/low\">LOW</option>\n";
+  ptr += "</select></td></tr>\n";  
+  
+  ptr += "<tr><td><p>STOR 2<p></td>\n";
+  ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n";
+  if (stor[1] == HIGH) ptr += "<option value=\"/stor2/high\" selected>HIGH</option>\n";
+  else ptr += "<option value=\"/stor2/high\">HIGH</option>\n";
+  if (stor[1] == LOW) ptr += "<option value=\"/stor2/low\" selected>LOW</option>\n";
+  else ptr += "<option value=\"/stor2/low\">LOW</option>\n";
+  ptr += "</select></td></tr>\n";  
+  
+  ptr += "<tr><td><p>STOR 3<p></td>\n";
+  ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n"; 
+  if (stor[2] == HIGH) ptr += "<option value=\"/stor3/high\" selected>HIGH</option>\n";
+  else ptr += "<option value=\"/stor3/high\">HIGH</option>\n";
+  if (stor[2] == LOW) ptr += "<option value=\"/stor3/low\" selected>LOW</option>\n";
+  else ptr += "<option value=\"/stor3/low\">LOW</option>\n";
+  ptr += "</select></td></tr>\n";  
+  
+  ptr += "<tr><td><p>STOR 4<p></td>\n";
+  ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n"; 
+  if (stor[3] == HIGH) ptr += "<option value=\"/stor4/high\" selected>HIGH</option>\n";
+  else ptr += "<option value=\"/stor4/high\">HIGH</option>\n";
+  if (stor[3] == LOW) ptr += "<option value=\"/stor4/low\" selected>LOW</option>\n";
+  else ptr += "<option value=\"/stor4/low\">LOW</option>\n";
+  ptr += "</select></td></tr>\n";  
+  ptr += "</table>\n";
+    
+  ptr += "</body>\n";
+  ptr += "</html>\n";
   return ptr;
 }
