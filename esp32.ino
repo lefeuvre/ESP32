@@ -164,11 +164,11 @@ String SendHTML(){
   ptr += "<title>OICore ESP32 Web Server</title>\n";
   
   ptr += "<style>\n";
-  ptr += "html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr += "html { font-family: Helvetica; display: inline-block; margin: 0px auto;}\n";
   ptr += "body{margin-top: 50px;}\n";
-  ptr += "h1 {color: #444444;margin: 50px auto 30px;}\n";
-  ptr += "h3 {color: #444444;margin-bottom: 50px;}\n";
-  ptr += "p {font-size: 14px;color: #444444;margin-bottom: 10px;}\n";
+  ptr += "h1 {margin: 30px auto 30px; text-align: center;}\n";
+  ptr += "h3 {margin-left: 10px;}\n";
+  ptr += "p {font-size: 14px;margin-bottom: 10px;}\n";
   ptr += "table {margin: auto;}\n";
   
   ptr += "</style>\n";
@@ -176,6 +176,8 @@ String SendHTML(){
 
   ptr += "<body>\n";
   ptr += "<h1>OICore ESP32 Web Server</h1>\n";
+
+  ptr += "<h3>LED control :</h3>\n";
 
   ptr += "<table>\n";  
   ptr += "<tr><td><p>LED<p></td>\n";
@@ -197,7 +199,11 @@ String SendHTML(){
   if (led == LED_WHITE) ptr += "<option value=\"/led/white\" selected>WHITE</option>\n";
   else ptr += "<option value=\"/led/white\">WHITE</option>\n";
   ptr += "</select></td></tr>\n";
-  
+  ptr += "</table>\n";
+
+  ptr += "<h3>Outputs control :</h3>\n";
+
+  ptr += "<table>\n";
   ptr += "<tr><td><p>STOR 1<p></td>\n";
   ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n";
   if (stor[0] == HIGH) ptr += "<option value=\"/stor1/high\" selected>HIGH</option>\n";
@@ -205,7 +211,6 @@ String SendHTML(){
   if (stor[0] == LOW) ptr += "<option value=\"/stor1/low\" selected>LOW</option>\n";
   else ptr += "<option value=\"/stor1/low\">LOW</option>\n";
   ptr += "</select></td></tr>\n";  
-  
   ptr += "<tr><td><p>STOR 2<p></td>\n";
   ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n";
   if (stor[1] == HIGH) ptr += "<option value=\"/stor2/high\" selected>HIGH</option>\n";
@@ -213,7 +218,6 @@ String SendHTML(){
   if (stor[1] == LOW) ptr += "<option value=\"/stor2/low\" selected>LOW</option>\n";
   else ptr += "<option value=\"/stor2/low\">LOW</option>\n";
   ptr += "</select></td></tr>\n";  
-  
   ptr += "<tr><td><p>STOR 3<p></td>\n";
   ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n"; 
   if (stor[2] == HIGH) ptr += "<option value=\"/stor3/high\" selected>HIGH</option>\n";
@@ -221,7 +225,6 @@ String SendHTML(){
   if (stor[2] == LOW) ptr += "<option value=\"/stor3/low\" selected>LOW</option>\n";
   else ptr += "<option value=\"/stor3/low\">LOW</option>\n";
   ptr += "</select></td></tr>\n";  
-  
   ptr += "<tr><td><p>STOR 4<p></td>\n";
   ptr += "<td><select onChange=\"window.document.location.href=this.options[this.selectedIndex].value;\">\n"; 
   if (stor[3] == HIGH) ptr += "<option value=\"/stor4/high\" selected>HIGH</option>\n";
