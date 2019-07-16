@@ -1,21 +1,26 @@
 #include <WiFi.h>
 #include <WebServer.h>
-#include "OIMessage.h"
-#include "OIDefinition.h"
-#include "OIProtocol.h"
 
-/* Put your SSID & Password */
+typedef enum LedColor {
+  LED_NONE = 0x00,
+  LED_RED = 0x01,
+  LED_GREEN = 0x02,
+  LED_YELLOW = 0x03,
+  LED_BLUE = 0x04,
+  LED_PURPLE = 0x05,
+  LED_CYAN = 0x06,
+  LED_WHITE = 0x07
+};
+
 const char* ssid = "OICore-ESP32-AP";
 const char* password = "123456789";
 
-/* Put IP Address details */
 IPAddress local_ip(192,168,1,1);
 IPAddress gateway(192,168,1,1);
 IPAddress subnet(255,255,255,0);
 
 WebServer server(80);
 
-OIMessage msg;
 LedColor led = LED_NONE;
 bool stor[4] = {LOW, LOW, LOW, LOW};
 
