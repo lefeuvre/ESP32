@@ -48,7 +48,7 @@ void setup() {
   });
   
   // Route to load style.css file
-  server.on("/design.css", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/style.css", "text/css");
   });
   

@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 	<head>
+		<title>ESP32 Web Server</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="data:,">
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
 		<h1>OICore ESP32 Web Server</h1>
+		<h3>Led control :</h3>
 		<table>
 			<tr>
-				<td>LED</td>
+				<td>LED Color</td>
 				<td>
 					<select onChange="window.document.location.href=this.options[this.selectedIndex].value;">
 						<option>NONE</option>
@@ -20,51 +25,53 @@
 				</td>
 			</tr>
 		</table>
-		<h2>Output</h2>
+		<h3>Outputs control :</h3>
 		<table>
 			<tr>
-				<td>GPIO 1</td>
+				<td>STOR 1</td>
 				<td><button class="btn btn-danger">LOW</button></td>
 			</tr>
 			<tr>
-				<td>GPIO 2</td>
+				<td>STOR 2</td>
 				<td><button class="btn btn-success">LOW</button></td>
 			</tr>
 			<tr>
-				<td>GPIO 3</td>
+				<td>STOR 3</td>
 				<td><button class="btn btn-success">LOW</button></td>
 			</tr>
 			<tr>
-				<td>GPIO 4</td>
+				<td>STOR 4</td>
 				<td><button class="btn btn-success">LOW</button></td>
 			</tr>
 		</table>
-		<h2>Input</h2>
-		<h3>Digital</h3>
+		<h3>Inputs values :</h3>
 		<table>
 			<tr>
-				<td>GPIO 1</td>
+				<td>ETOR 1</td>
 			</tr>
 			<tr>
-				<td>GPIO 2</td>
+				<td>ETOR 2</td>
 			</tr>
 			<tr>
-				<td>GPIO 3</td>
+				<td>ETOR 3</td>
 			</tr>
 			<tr>
-				<td>GPIO 4</td>
+				<td>ETOR 4</td>
+			</tr>
+			<tr>
+				<td>ETOR 5</td>
+			</tr>
+			<tr>
+				<td>ETOR 6</td>
+			</tr>
+			<tr>
+				<td>AN 1</td>
+			</tr>
+			<tr>
+				<td>AN 2</td>
 			</tr>
 		</table>
-		<h3>Analog</h3>
-		<table>
-			<tr>
-				<td>ANA 1</td>
-			</tr>
-			<tr>
-				<td>ANA 2</td>
-			</tr>
-		</table>
-		<h2>User trame</h2>
+		<h3>User trame :</h3>
 		<table>
 			<tr>
 				<td><input /></td>

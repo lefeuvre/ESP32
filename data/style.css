@@ -1,0 +1,22 @@
+html { 
+	font-family: Helvetica; 
+	display: inline-block; 
+	margin: 0px auto;
+}
+body {
+	margin-top: 50px;
+}
+h1 {
+	margin: 30px auto 30px;
+	text-align: center;
+}
+h3 {
+	margin-left: 10px;
+}
+p {
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+table {
+	margin: auto;
+}
