@@ -1,5 +1,6 @@
 #include <WiFi.h>
-#include <WebServer.h>
+#include "ESPAsyncWebServer.h"
+#include "SPIFFS.h"
 
 typedef enum LedColor {
   LED_NONE = 0x00,
@@ -19,19 +20,39 @@ IPAddress local_ip(192,168,1,1);
 IPAddress gateway(192,168,1,1);
 IPAddress subnet(255,255,255,0);
 
-WebServer server(80);
+AsyncWebServer server(80);
 
 LedColor led = LED_NONE;
 bool stor[4] = {LOW, LOW, LOW, LOW};
 
+String processor(const String& var){
+  return String();
+}
+
 void setup() {
   Serial.begin(115200);
 
+  // Initialize SPIFFS
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+
   WiFi.softAP(ssid, password);
   WiFi.softAPConfig(local_ip, gateway, subnet);
-  delay(100);
+
+
+  // Route for root / web page
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
   
-  server.on("/", handle_OnConnect);
+  // Route to load style.css file
+  server.on("/design.css", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+  
+  /*server.on("/", handle_OnConnect);
   server.on("/led/none", handle_led_none);
   server.on("/led/red", handle_led_red);
   server.on("/led/green", handle_led_green);
@@ -48,15 +69,15 @@ void setup() {
   server.on("/stor3/high", handle_stor3_high);
   server.on("/stor4/low", handle_stor4_low);
   server.on("/stor4/high", handle_stor4_high);
-  server.onNotFound(handle_NotFound);
+  server.onNotFound(handle_NotFound);*/
   
   server.begin();
   Serial.println("HTTP server started");
 }
 void loop() {
-  server.handleClient();
+  //server.handleClient();
 }
-
+/*
 void handle_OnConnect() {
   Serial.println("Led color: NONE");
   server.send(200, "text/html", SendHTML()); 
@@ -242,4 +263,4 @@ String SendHTML(){
   ptr += "</body>\n";
   ptr += "</html>\n";
   return ptr;
-}
+}*/

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+	<head>
+	</head>
+	<body>
+		<h1>OICore ESP32 Web Server</h1>
+		<table>
+			<tr>
+				<td>LED</td>
+				<td>
+					<select onChange="window.document.location.href=this.options[this.selectedIndex].value;">
+						<option>NONE</option>
+						<option>RED</option>
+						<option>GREEN</option>
+						<option>YELLOW</option>
+						<option>BLUE</option>
+						<option>PURPLE</option>
+						<option>CYAN</option>
+						<option>WHITE</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<h2>Output</h2>
+		<table>
+			<tr>
+				<td>GPIO 1</td>
+				<td><button class="btn btn-danger">LOW</button></td>
+			</tr>
+			<tr>
+				<td>GPIO 2</td>
+				<td><button class="btn btn-success">LOW</button></td>
+			</tr>
+			<tr>
+				<td>GPIO 3</td>
+				<td><button class="btn btn-success">LOW</button></td>
+			</tr>
+			<tr>
+				<td>GPIO 4</td>
+				<td><button class="btn btn-success">LOW</button></td>
+			</tr>
+		</table>
+		<h2>Input</h2>
+		<h3>Digital</h3>
+		<table>
+			<tr>
+				<td>GPIO 1</td>
+			</tr>
+			<tr>
+				<td>GPIO 2</td>
+			</tr>
+			<tr>
+				<td>GPIO 3</td>
+			</tr>
+			<tr>
+				<td>GPIO 4</td>
+			</tr>
+		</table>
+		<h3>Analog</h3>
+		<table>
+			<tr>
+				<td>ANA 1</td>
+			</tr>
+			<tr>
+				<td>ANA 2</td>
+			</tr>
+		</table>
+		<h2>User trame</h2>
+		<table>
+			<tr>
+				<td><input /></td>
+				<td><button class="btn">Send</button></td>
+			</tr>
+		</table>
+	</body>
+</html>
