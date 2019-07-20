@@ -57,10 +57,7 @@ String processor(const String& var){
 void setup() {
   Serial.begin(115200);
 
-  if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    return;
-  }
+  SPIFFS.begin(true);
 
   WiFi.softAP(ssid, password);
   WiFi.softAPConfig(local_ip, gateway, subnet);
@@ -75,63 +72,115 @@ void setup() {
 
   server.on("/act", HTTP_GET, [](AsyncWebServerRequest *request){
     String cmd;
+    uint8_t buf[8] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    size_t len = 8;
+    
     if (request->hasParam("c")) {
       cmd = request->getParam("c")->value();
     }
     if (cmd == "LED_COLOR_NONE") {
       cmd_led = "LED_COLOR_NONE";
+      buf[0] = 0x14;
+      buf[4] = 0x00;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_RED") {
       cmd_led = "LED_COLOR_RED";
+      buf[0] = 0x14;
+      buf[4] = 0x01;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_GREEN") {
       cmd_led = "LED_COLOR_GREEN";
+      buf[0] = 0x14;
+      buf[4] = 0x02;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_YELLOW") {
       cmd_led = "LED_COLOR_YELLOW";
+      buf[0] = 0x14;
+      buf[4] = 0x03;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_BLUE") {
       cmd_led = "LED_COLOR_BLUE";
+      buf[0] = 0x14;
+      buf[4] = 0x04;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_PURPLE") {
       cmd_led = "LED_COLOR_PURPLE";
+      buf[0] = 0x14;
+      buf[4] = 0x05;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_CYAN") {
       cmd_led = "LED_COLOR_CYAN";
+      buf[0] = 0x14;
+      buf[4] = 0x06;
+      buf[7] = 0x01;
     }
     else if (cmd == "LED_COLOR_WHITE") {
       cmd_led = "LED_COLOR_WHITE";
+      buf[0] = 0x14;
+      buf[4] = 0x07;
+      buf[7] = 0x01;
     }
     else if (cmd == "STOR1_HIGH") {
       cmd_stor1 = "STOR1_HIGH";
+      buf[0] = 0x31;
+      buf[3] = 0x00;
+      buf[7] = 0x01;
     }
     else if (cmd == "STOR1_LOW") {
       cmd_stor1 = "STOR1_LOW";
+      buf[0] = 0x31;
+      buf[3] = 0x00;
+      buf[7] = 0x00;
     }
     else if (cmd == "STOR2_HIGH") {
       cmd_stor2 = "STOR2_HIGH";
+      buf[0] = 0x31;
+      buf[3] = 0x01;
+      buf[7] = 0x01;
     }
     else if (cmd == "STOR2_LOW") {
       cmd_stor2 = "STOR2_LOW";
+      buf[0] = 0x31;
+      buf[3] = 0x01;
+      buf[7] = 0x00;
     }
     else if (cmd == "STOR3_HIGH") {
       cmd_stor3 = "STOR3_HIGH";
+      buf[0] = 0x31;
+      buf[3] = 0x02;
+      buf[7] = 0x01;
     }
     else if (cmd == "STOR3_LOW") {
       cmd_stor3 = "STOR3_LOW";
+      buf[0] = 0x31;
+      buf[3] = 0x02;
+      buf[7] = 0x00;
     }
     else if (cmd == "STOR4_HIGH") {
       cmd_stor4 = "STOR4_HIGH";
+      buf[0] = 0x31;
+      buf[3] = 0x03;
+      buf[7] = 0x01;
     }
     else if (cmd == "STOR4_LOW") {
       cmd_stor4 = "STOR4_LOW";
+      buf[0] = 0x31;
+      buf[3] = 0x03;
+      buf[7] = 0x00;
     }
 
     request->send(SPIFFS, "/index.html", String(), false, processor);
+
+    Serial.write(buf, len);
   });
   
   server.begin();
-  Serial.println("HTTP server started");
 }
 
 void loop() {}
