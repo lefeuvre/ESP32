@@ -32,3 +32,6 @@ table {
 .ligne-paire{
     background-color: #EEE;
 }
+form {
+	text-align: center;
+}

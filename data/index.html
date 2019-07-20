@@ -86,9 +86,14 @@
 			</tr>
 		</table>
 		<h3>User trame :</h3>
-		<p>
-			<input />
-			<a href="/act?c=SEND_TRAME"><button class="button">Send</button></a>
-		</p>		
+		<form>
+			<input type="text" maxlength="16" id="trame">
+			<input type="button" value="Send" onclick=send(trame.value)>
+		</form>
+		<script>
+		function send(value) {
+			location = "/act?c=SEND&v=" + value
+		}
+		</script>
 	</body>
 </html>
