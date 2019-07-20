@@ -8,42 +8,48 @@
 	<body>
 		<h1>OICore ESP32 Web Server</h1>
 		<h3>Led control :</h3>
-		<table>
-			<tr>
-				<td>LED Color</td>
-				<td>
-					<select onChange="window.document.location.href=this.options[this.selectedIndex].value;">
-						<option>NONE</option>
-						<option>RED</option>
-						<option>GREEN</option>
-						<option>YELLOW</option>
-						<option>BLUE</option>
-						<option>PURPLE</option>
-						<option>CYAN</option>
-						<option>WHITE</option>
-					</select>
-				</td>
-			</tr>
-		</table>
+		<p>
+			LED Color
+			<select onChange="location = this.value;">
+				<option value="/act?c=LED_COLOR_NONE" %LED_COLOR_NONE%>NONE</option>
+				<option value="/act?c=LED_COLOR_RED" %LED_COLOR_RED%>RED</option>
+				<option value="/act?c=LED_COLOR_GREEN" %LED_COLOR_GREEN%>GREEN</option>
+				<option value="/act?c=LED_COLOR_YELLOW" %LED_COLOR_YELLOW%>YELLOW</option>
+				<option value="/act?c=LED_COLOR_BLUE" %LED_COLOR_BLUE%>BLUE</option>
+				<option value="/act?c=LED_COLOR_PURPLE" %LED_COLOR_PURPLE%>PURPLE</option>
+				<option value="/act?c=LED_COLOR_CYAN" %LED_COLOR_CYAN%>CYAN</option>
+				<option value="/act?c=LED_COLOR_WHITE" %LED_COLOR_WHITE%>WHITE</option>
+			</select>
+		</p>		
 		<h3>Outputs control :</h3>
-		<table>
-			<tr>
-				<td>STOR 1</td>
-				<td><button class="btn btn-danger">LOW</button></td>
-			</tr>
-			<tr>
-				<td>STOR 2</td>
-				<td><button class="btn btn-success">LOW</button></td>
-			</tr>
-			<tr>
-				<td>STOR 3</td>
-				<td><button class="btn btn-success">LOW</button></td>
-			</tr>
-			<tr>
-				<td>STOR 4</td>
-				<td><button class="btn btn-success">LOW</button></td>
-			</tr>
-		</table>
+		<p>
+			STOR 1
+			<select onChange="location = this.value;">
+				<option value="/act?c=STOR1_HIGH" %STOR1_HIGH%>HIGH</option>
+				<option value="/act?c=STOR1_LOW" %STOR1_LOW%>LOW</option>
+			</select>
+		</p>
+		<p>
+			STOR 2
+			<select onChange="location = this.value;">
+				<option value="/act?c=STOR2_HIGH" %STOR2_HIGH%>HIGH</option>
+				<option value="/act?c=STOR2_LOW" %STOR2_LOW%>LOW</option>
+			</select>
+		</p>
+		<p>
+			STOR 3
+			<select onChange="location = this.value;">
+				<option value="/act?c=STOR3_HIGH" %STOR3_HIGH%>HIGH</option>
+				<option value="/act?c=STOR3_LOW" %STOR3_LOW%>LOW</option>
+			</select>
+		</p>	
+		<p>
+			STOR 4
+			<select onChange="location = this.value;">
+				<option value="/act?c=STOR4_HIGH" %STOR4_HIGH%>HIGH</option>
+				<option value="/act?c=STOR4_LOW" %STOR4_LOW%>LOW</option>
+			</select>
+		</p>
 		<h3>Inputs values :</h3>
 		<table>
 			<tr>
@@ -77,6 +83,6 @@
 				<td><input /></td>
 				<td><button class="btn">Send</button></td>
 			</tr>
-		</table>
+		</table>		
 	</body>
 </html>
