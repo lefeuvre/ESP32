@@ -18,6 +18,17 @@ p {
 	margin-bottom: 10px;
 	text-align: center;
 }
+td {
+	border: 1px solid black;
+	padding: 10px 15px;
+}
 table {
+	border-collapse: collapse;
 	margin: auto;
+}
+.ligne-impaire{
+    background-color: #BBB;
+}
+.ligne-paire{
+    background-color: #EEE;
 }

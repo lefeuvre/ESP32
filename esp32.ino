@@ -12,10 +12,9 @@ IPAddress subnet(255,255,255,0);
 AsyncWebServer server(80);
 
 String cmd_led = "LED_COLOR_NONE";
-String cmd_stor1 = "HIGH";
-String cmd_stor2 = "HIGH";
-String cmd_stor3 = "HIGH";
-String cmd_stor4 = "HIGH";
+String cmd_stor[4] = {"HIGH", "HIGH", "HIGH", "HIGH"};
+String etor_state[6] = {"-", "-", "-", "-", "-", "-"};
+String an_value[2] = {"-", "-"};
 
 String processor(const String& var){
   if (var == "LED_COLOR_NONE" && cmd_led == "LED_COLOR_NONE")
@@ -34,22 +33,38 @@ String processor(const String& var){
     return "selected";
   else if (var == "LED_COLOR_WHITE" && cmd_led == "LED_COLOR_WHITE")
     return "selected";
-  else if (var == "STOR1_HIGH" && cmd_stor1 == "STOR1_HIGH")
+  else if (var == "STOR1_HIGH" && cmd_stor[0] == "STOR1_HIGH")
     return "selected";
-  else if (var == "STOR1_LOW" && cmd_stor1 == "STOR1_LOW")
+  else if (var == "STOR1_LOW" && cmd_stor[0] == "STOR1_LOW")
     return "selected";
-  else if (var == "STOR2_HIGH" && cmd_stor2 == "STOR2_HIGH")
+  else if (var == "STOR2_HIGH" && cmd_stor[1] == "STOR2_HIGH")
     return "selected";
-  else if (var == "STOR2_LOW" && cmd_stor2 == "STOR2_LOW")
+  else if (var == "STOR2_LOW" && cmd_stor[1] == "STOR2_LOW")
     return "selected";
-  else if (var == "STOR3_HIGH" && cmd_stor3 == "STOR3_HIGH")
+  else if (var == "STOR3_HIGH" && cmd_stor[2] == "STOR3_HIGH")
     return "selected";
-  else if (var == "STOR3_LOW" && cmd_stor3 == "STOR3_LOW")
+  else if (var == "STOR3_LOW" && cmd_stor[2] == "STOR3_LOW")
     return "selected";
-  else if (var == "STOR4_HIGH" && cmd_stor4 == "STOR4_HIGH")
+  else if (var == "STOR4_HIGH" && cmd_stor[3] == "STOR4_HIGH")
     return "selected";
-  else if (var == "STOR4_LOW" && cmd_stor4 == "STOR4_LOW")
+  else if (var == "STOR4_LOW" && cmd_stor[3] == "STOR4_LOW")
     return "selected";
+  else if (var == "ETOR1_STATE")
+    return etor_state[0];
+  else if (var == "ETOR2_STATE")
+    return etor_state[1];
+  else if (var == "ETOR3_STATE")
+    return etor_state[2];
+  else if (var == "ETOR4_STATE")
+    return etor_state[3];
+  else if (var == "ETOR5_STATE")
+    return etor_state[4];
+  else if (var == "ETOR6_STATE")
+    return etor_state[5];
+  else if (var == "AN1_VALUE")
+    return an_value[0];
+  else if (var == "AN2_VALUE")
+    return an_value[1];
   else
     return String();
 }
@@ -127,49 +142,49 @@ void setup() {
       buf[7] = 0x01;
     }
     else if (cmd == "STOR1_HIGH") {
-      cmd_stor1 = "STOR1_HIGH";
+      cmd_stor[0] = "STOR1_HIGH";
       buf[0] = 0x31;
       buf[3] = 0x00;
       buf[7] = 0x01;
     }
     else if (cmd == "STOR1_LOW") {
-      cmd_stor1 = "STOR1_LOW";
+      cmd_stor[0] = "STOR1_LOW";
       buf[0] = 0x31;
       buf[3] = 0x00;
       buf[7] = 0x00;
     }
     else if (cmd == "STOR2_HIGH") {
-      cmd_stor2 = "STOR2_HIGH";
+      cmd_stor[1] = "STOR2_HIGH";
       buf[0] = 0x31;
       buf[3] = 0x01;
       buf[7] = 0x01;
     }
     else if (cmd == "STOR2_LOW") {
-      cmd_stor2 = "STOR2_LOW";
+      cmd_stor[1] = "STOR2_LOW";
       buf[0] = 0x31;
       buf[3] = 0x01;
       buf[7] = 0x00;
     }
     else if (cmd == "STOR3_HIGH") {
-      cmd_stor3 = "STOR3_HIGH";
+      cmd_stor[2] = "STOR3_HIGH";
       buf[0] = 0x31;
       buf[3] = 0x02;
       buf[7] = 0x01;
     }
     else if (cmd == "STOR3_LOW") {
-      cmd_stor3 = "STOR3_LOW";
+      cmd_stor[2] = "STOR3_LOW";
       buf[0] = 0x31;
       buf[3] = 0x02;
       buf[7] = 0x00;
     }
     else if (cmd == "STOR4_HIGH") {
-      cmd_stor4 = "STOR4_HIGH";
+      cmd_stor[3] = "STOR4_HIGH";
       buf[0] = 0x31;
       buf[3] = 0x03;
       buf[7] = 0x01;
     }
     else if (cmd == "STOR4_LOW") {
-      cmd_stor4 = "STOR4_LOW";
+      cmd_stor[3] = "STOR4_LOW";
       buf[0] = 0x31;
       buf[3] = 0x03;
       buf[7] = 0x00;
