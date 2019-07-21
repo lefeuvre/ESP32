@@ -207,4 +207,50 @@ void setup() {
   server.begin();
 }
 
-void loop() {}
+void loop(){
+  uint8_t tmp[8];
+  while (Serial.available()) {
+    for (int i=0; i<8; i++) {
+      tmp[i] = Serial.read();
+      //Serial.println(tmp[i]);
+    }
+    if (tmp[0] == 0x32) {
+      if (tmp[3] == 0x00 && tmp[7] == 0x00) {
+        etor_state[0] = "LOW";
+      }
+      else if (tmp[3] == 0x00 && tmp[7] == 0x01) {
+        etor_state[0] = "HIGH";
+      }
+      else if (tmp[3] == 0x01 && tmp[7] == 0x00) {
+        etor_state[1] = "LOW";
+      }
+      else if (tmp[3] == 0x01 && tmp[7] == 0x01) {
+        etor_state[1] = "HIGH";
+      }
+      else if (tmp[3] == 0x02 && tmp[7] == 0x00) {
+        etor_state[2] = "LOW";
+      }
+      else if (tmp[3] == 0x02 && tmp[7] == 0x01) {
+        etor_state[2] = "HIGH";
+      }
+      else if (tmp[3] == 0x03 && tmp[7] == 0x00) {
+        etor_state[3] = "LOW";
+      }
+      else if (tmp[3] == 0x03 && tmp[7] == 0x01) {
+        etor_state[3] = "HIGH";
+      }
+      else if (tmp[3] == 0x04 && tmp[7] == 0x00) {
+        etor_state[4] = "LOW";
+      }
+      else if (tmp[3] == 0x04 && tmp[7] == 0x01) {
+        etor_state[4] = "HIGH";
+      }
+      else if (tmp[3] == 0x05 && tmp[7] == 0x00) {
+        etor_state[5] = "LOW";
+      }
+      else if (tmp[3] == 0x05 && tmp[7] == 0x01) {
+        etor_state[5] = "HIGH";
+      }
+    }
+  }
+}
