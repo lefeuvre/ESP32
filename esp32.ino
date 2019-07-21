@@ -86,13 +86,14 @@ void setup() {
   });
 
   server.on("/act", HTTP_GET, [](AsyncWebServerRequest *request){
-    String cmd;
+    String cmd, val;
     uint8_t buf[8] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     size_t len = 8;
     
     if (request->hasParam("c")) {
       cmd = request->getParam("c")->value();
     }
+    
     if (cmd == "LED_COLOR_NONE") {
       cmd_led = "LED_COLOR_NONE";
       buf[0] = 0x14;
@@ -188,6 +189,14 @@ void setup() {
       buf[0] = 0x31;
       buf[3] = 0x03;
       buf[7] = 0x00;
+    }
+    else if (cmd == "SEND") {
+      if (request->hasParam("v")) {
+        val = request->getParam("v")->value();
+      }
+      if (val.length() == 16) {
+        // Convert string to uint8_t array        
+      }
     }
 
     request->send(SPIFFS, "/index.html", String(), false, processor);

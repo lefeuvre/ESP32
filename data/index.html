@@ -88,10 +88,10 @@
 		<h3>User trame :</h3>
 		<form>
 			<input type="text" maxlength="16" id="trame">
-			<input type="button" value="Send" onclick=send(trame.value)>
+			<input type="button" value="Send" onclick=changeLocation(trame.value)>
 		</form>
 		<script>
-		function send(value) {
+		function changeLocation(value) {
 			location = "/act?c=SEND&v=" + value
 		}
 		</script>
