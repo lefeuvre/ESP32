@@ -26,27 +26,27 @@ IPAddress subnet(255,255,255,0);
 
 AsyncWebServer server(80);
 
-String cmd_led = "LED_COLOR_NONE";
+String cmd_led = "LED_NONE";
 String cmd_stor[4] = {"HIGH", "HIGH", "HIGH", "HIGH"};
 String etor_state[6] = {"-", "-", "-", "-", "-", "-"};
 String an_value[2] = {"-", "-"};
 
 String processor(const String& var){
-  if (var == "LED_COLOR_NONE" && cmd_led == "LED_COLOR_NONE")
+  if (var == "LED_NONE" && cmd_led == "LED_NONE")
     return "selected";
-  else if (var == "LED_COLOR_RED" && cmd_led == "LED_COLOR_RED")
+  else if (var == "LED_RED" && cmd_led == "LED_RED")
     return "selected";
-  else if (var == "LED_COLOR_GREEN" && cmd_led == "LED_COLOR_GREEN")
+  else if (var == "LED_GREEN" && cmd_led == "LED_GREEN")
     return "selected";
-  else if (var == "LED_COLOR_YELLOW" && cmd_led == "LED_COLOR_YELLOW")
+  else if (var == "LED_YELLOW" && cmd_led == "LED_YELLOW")
     return "selected";
-  else if (var == "LED_COLOR_BLUE" && cmd_led == "LED_COLOR_BLUE")
+  else if (var == "LED_BLUE" && cmd_led == "LED_BLUE")
     return "selected";
-  else if (var == "LED_COLOR_PURPLE" && cmd_led == "LED_COLOR_PURPLE")
+  else if (var == "LED_PURPLE" && cmd_led == "LED_PURPLE")
     return "selected";
-  else if (var == "LED_COLOR_CYAN" && cmd_led == "LED_COLOR_CYAN")
+  else if (var == "LED_CYAN" && cmd_led == "LED_CYAN")
     return "selected";
-  else if (var == "LED_COLOR_WHITE" && cmd_led == "LED_COLOR_WHITE")
+  else if (var == "LED_WHITE" && cmd_led == "LED_WHITE")
     return "selected";
   else if (var == "STOR1_HIGH" && cmd_stor[0] == "STOR1_HIGH")
     return "selected";
@@ -94,18 +94,6 @@ uint16_t calculChecksum(uint8_t* buf, uint8_t len) {
   return checksum;
 }
 
-uint8_t* encodeCmd(uint8_t* buf) {
-  uint8_t tmp[12] = {0};
-  size_t len = 8;
-  tmp[0] = 0x4F; // Heading
-  tmp[1] = 0x49; // Heading
-  for (int i=0; i<len; i++) {
-    tmp[i+2] = buf[i]; // data
-  }
-  tmp[11] = calculChecksum (buf, len); // CRC
-  return tmp;
-}
-
 void setup() {
   Serial.begin(115200);
 
@@ -124,107 +112,109 @@ void setup() {
 
   server.on("/act", HTTP_GET, [](AsyncWebServerRequest *request){
     String cmd, val;
-    uint8_t buf[8] = {0};
+    uint8_t buf[12] = {0};
+    size_t len = 12;
+    uint16_t crc;
     
     if (request->hasParam("c")) {
       cmd = request->getParam("c")->value();
     }
     
-    if (cmd == "LED_COLOR_NONE") {
-      cmd_led = "LED_COLOR_NONE";
-      buf[0] = 0x14;
-      buf[4] = 0x00;
-      buf[7] = 0x01;
+    if (cmd == "LED_NONE") {
+      cmd_led = "LED_NONE";
+      buf[2] = 0x14;
+      buf[6] = 0x00;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_RED") {
-      cmd_led = "LED_COLOR_RED";
-      buf[0] = 0x14;
-      buf[4] = 0x01;
-      buf[7] = 0x01;
+    else if (cmd == "LED_RED") {
+      cmd_led = "LED_RED";
+      buf[2] = 0x14;
+      buf[6] = 0x01;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_GREEN") {
-      cmd_led = "LED_COLOR_GREEN";
-      buf[0] = 0x14;
-      buf[4] = 0x02;
-      buf[7] = 0x01;
+    else if (cmd == "LED_GREEN") {
+      cmd_led = "LED_GREEN";
+      buf[2] = 0x14;
+      buf[6] = 0x02;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_YELLOW") {
-      cmd_led = "LED_COLOR_YELLOW";
-      buf[0] = 0x14;
-      buf[4] = 0x03;
-      buf[7] = 0x01;
+    else if (cmd == "LED_YELLOW") {
+      cmd_led = "LED_YELLOW";
+      buf[2] = 0x14;
+      buf[6] = 0x03;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_BLUE") {
-      cmd_led = "LED_COLOR_BLUE";
-      buf[0] = 0x14;
-      buf[4] = 0x04;
-      buf[7] = 0x01;
+    else if (cmd == "LED_BLUE") {
+      cmd_led = "LED_BLUE";
+      buf[2] = 0x14;
+      buf[6] = 0x04;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_PURPLE") {
-      cmd_led = "LED_COLOR_PURPLE";
-      buf[0] = 0x14;
-      buf[4] = 0x05;
-      buf[7] = 0x01;
+    else if (cmd == "LED_PURPLE") {
+      cmd_led = "LED_PURPLE";
+      buf[2] = 0x14;
+      buf[6] = 0x05;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_CYAN") {
-      cmd_led = "LED_COLOR_CYAN";
-      buf[0] = 0x14;
-      buf[4] = 0x06;
-      buf[7] = 0x01;
+    else if (cmd == "LED_CYAN") {
+      cmd_led = "LED_CYAN";
+      buf[2] = 0x14;
+      buf[6] = 0x06;
+      buf[9] = 0x01;
     }
-    else if (cmd == "LED_COLOR_WHITE") {
-      cmd_led = "LED_COLOR_WHITE";
-      buf[0] = 0x14;
-      buf[4] = 0x07;
-      buf[7] = 0x01;
+    else if (cmd == "LED_WHITE") {
+      cmd_led = "LED_WHITE";
+      buf[2] = 0x14;
+      buf[6] = 0x07;
+      buf[9] = 0x01;
     }
     else if (cmd == "STOR1_HIGH") {
       cmd_stor[0] = "STOR1_HIGH";
-      buf[0] = 0x31;
-      buf[3] = 0x00;
-      buf[7] = 0x01;
+      buf[2] = 0x31;
+      buf[5] = 0x00;
+      buf[9] = 0x01;
     }
     else if (cmd == "STOR1_LOW") {
       cmd_stor[0] = "STOR1_LOW";
-      buf[0] = 0x31;
-      buf[3] = 0x00;
-      buf[7] = 0x00;
+      buf[2] = 0x31;
+      buf[5] = 0x00;
+      buf[9] = 0x00;
     }
     else if (cmd == "STOR2_HIGH") {
       cmd_stor[1] = "STOR2_HIGH";
-      buf[0] = 0x31;
-      buf[3] = 0x01;
-      buf[7] = 0x01;
+      buf[2] = 0x31;
+      buf[5] = 0x01;
+      buf[9] = 0x01;
     }
     else if (cmd == "STOR2_LOW") {
       cmd_stor[1] = "STOR2_LOW";
-      buf[0] = 0x31;
-      buf[3] = 0x01;
-      buf[7] = 0x00;
+      buf[2] = 0x31;
+      buf[5] = 0x01;
+      buf[9] = 0x00;
     }
     else if (cmd == "STOR3_HIGH") {
       cmd_stor[2] = "STOR3_HIGH";
-      buf[0] = 0x31;
-      buf[3] = 0x02;
-      buf[7] = 0x01;
+      buf[2] = 0x31;
+      buf[5] = 0x02;
+      buf[9] = 0x01;
     }
     else if (cmd == "STOR3_LOW") {
       cmd_stor[2] = "STOR3_LOW";
-      buf[0] = 0x31;
-      buf[3] = 0x02;
-      buf[7] = 0x00;
+      buf[2] = 0x31;
+      buf[5] = 0x02;
+      buf[9] = 0x00;
     }
     else if (cmd == "STOR4_HIGH") {
       cmd_stor[3] = "STOR4_HIGH";
-      buf[0] = 0x31;
-      buf[3] = 0x03;
-      buf[7] = 0x01;
+      buf[2] = 0x31;
+      buf[5] = 0x03;
+      buf[9] = 0x01;
     }
     else if (cmd == "STOR4_LOW") {
       cmd_stor[3] = "STOR4_LOW";
-      buf[0] = 0x31;
-      buf[3] = 0x03;
-      buf[7] = 0x00;
+      buf[2] = 0x31;
+      buf[5] = 0x03;
+      buf[9] = 0x00;
     }
     else if (cmd == "SEND") {
       if (request->hasParam("v")) {
@@ -237,7 +227,14 @@ void setup() {
 
     request->send(SPIFFS, "/index.html", String(), false, processor);
 
-    Serial.write(encodeCmd(buf), 12);
+    // Add checksum and heading
+    crc = calculChecksum(buf, len);
+    buf[10] = (uint8_t)((crc & 0xFF00) >> 8);
+    buf[11] = (uint8_t)(crc & 0x00FF);
+    buf[0] = 0x4F;
+    buf[1] = 0x49;
+    
+    Serial.write(buf, len);
   });
   
   server.begin();
