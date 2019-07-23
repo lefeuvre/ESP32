@@ -2,11 +2,8 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
-#define LOW                 (uint8_t)0x00
-#define HIGH                (uint8_t)0x01
-/*#define ACT_BLINK_LED       (uint8_t)0X14
-#define PROCESS_SET_VALUE   (uint8_t)0x31
-#define PROCESS_GET_DATA    (uint8_t)0x35*/
+#define LOW   (uint8_t)0x00
+#define HIGH  (uint8_t)0x01
 
 typedef enum
 {
