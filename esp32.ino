@@ -2,6 +2,24 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
+#define LOW                 (uint8_t)0x00
+#define HIGH                (uint8_t)0x01
+/*#define ACT_BLINK_LED       (uint8_t)0X14
+#define PROCESS_SET_VALUE   (uint8_t)0x31
+#define PROCESS_GET_DATA    (uint8_t)0x35*/
+
+typedef enum
+{
+  LED_NONE    = (uint8_t)0,
+  LED_RED     = (uint8_t)1,
+  LED_GREEN   = (uint8_t)2,
+  LED_YELLOW  = (uint8_t)3,
+  LED_BLUE    = (uint8_t)4,
+  LED_PURPLE  = (uint8_t)5,
+  LED_CYAN    = (uint8_t)6,
+  LED_WHITE   = (uint8_t)7,
+} LedColor;
+
 const char* ssid = "OICore-ESP32-AP";
 const char* password = "123456789";
 
@@ -69,6 +87,28 @@ String processor(const String& var){
     return String();
 }
 
+uint16_t calculChecksum(uint8_t* buf, uint8_t len) {
+  uint16_t checksum = 0;
+  if (buf != NULL) {
+    for (int i=0; i<len; i++) {
+      checksum += buf[i];
+    }
+  }
+  return checksum;
+}
+
+uint8_t* encodeCmd(uint8_t* buf) {
+  uint8_t tmp[12] = {0};
+  size_t len = 8;
+  tmp[0] = 0x4F; // Heading
+  tmp[1] = 0x49; // Heading
+  for (int i=0; i<len; i++) {
+    tmp[i+2] = buf[i]; // data
+  }
+  tmp[11] = calculChecksum (buf, len); // CRC
+  return tmp;
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -87,8 +127,7 @@ void setup() {
 
   server.on("/act", HTTP_GET, [](AsyncWebServerRequest *request){
     String cmd, val;
-    uint8_t buf[8] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    size_t len = 8;
+    uint8_t buf[8] = {0};
     
     if (request->hasParam("c")) {
       cmd = request->getParam("c")->value();
@@ -201,7 +240,7 @@ void setup() {
 
     request->send(SPIFFS, "/index.html", String(), false, processor);
 
-    Serial.write(buf, len);
+    Serial.write(encodeCmd(buf), 12);
   });
   
   server.begin();
@@ -209,47 +248,53 @@ void setup() {
 
 void loop(){
   uint8_t tmp[8];
+  
   while (Serial.available()) {
-    for (int i=0; i<8; i++) {
-      tmp[i] = Serial.read();
-      //Serial.println(tmp[i]);
-    }
-    if (tmp[0] == 0x32) {
-      if (tmp[3] == 0x00 && tmp[7] == 0x00) {
-        etor_state[0] = "LOW";
-      }
-      else if (tmp[3] == 0x00 && tmp[7] == 0x01) {
-        etor_state[0] = "HIGH";
-      }
-      else if (tmp[3] == 0x01 && tmp[7] == 0x00) {
-        etor_state[1] = "LOW";
-      }
-      else if (tmp[3] == 0x01 && tmp[7] == 0x01) {
-        etor_state[1] = "HIGH";
-      }
-      else if (tmp[3] == 0x02 && tmp[7] == 0x00) {
-        etor_state[2] = "LOW";
-      }
-      else if (tmp[3] == 0x02 && tmp[7] == 0x01) {
-        etor_state[2] = "HIGH";
-      }
-      else if (tmp[3] == 0x03 && tmp[7] == 0x00) {
-        etor_state[3] = "LOW";
-      }
-      else if (tmp[3] == 0x03 && tmp[7] == 0x01) {
-        etor_state[3] = "HIGH";
-      }
-      else if (tmp[3] == 0x04 && tmp[7] == 0x00) {
-        etor_state[4] = "LOW";
-      }
-      else if (tmp[3] == 0x04 && tmp[7] == 0x01) {
-        etor_state[4] = "HIGH";
-      }
-      else if (tmp[3] == 0x05 && tmp[7] == 0x00) {
-        etor_state[5] = "LOW";
-      }
-      else if (tmp[3] == 0x05 && tmp[7] == 0x01) {
-        etor_state[5] = "HIGH";
+    if (Serial.read() == 0x4F) {
+      if (Serial.read() == 0x49) {
+        for (int i=0; i<8; i++) {
+          tmp[i] = Serial.read();
+        }
+        if (calculChecksum(tmp, 8) == ((Serial.read() << 8) + Serial.read())) {
+          if (tmp[0] == 0x35) { // PROCESS_GET_DATA
+            if (tmp[3] == 0x00 && tmp[7] == LOW) {
+              etor_state[0] = "LOW";
+            }
+            else if (tmp[3] == 0x00 && tmp[7] == HIGH) {
+              etor_state[0] = "HIGH";
+            }
+            else if (tmp[3] == 0x01 && tmp[7] == LOW) {
+              etor_state[1] = "LOW";
+            }
+            else if (tmp[3] == 0x01 && tmp[7] == HIGH) {
+              etor_state[1] = "HIGH";
+            }
+            else if (tmp[3] == 0x02 && tmp[7] == LOW) {
+              etor_state[2] = "LOW";
+            }
+            else if (tmp[3] == 0x02 && tmp[7] == HIGH) {
+              etor_state[2] = "HIGH";
+            }
+            else if (tmp[3] == 0x03 && tmp[7] == LOW) {
+              etor_state[3] = "LOW";
+            }
+            else if (tmp[3] == 0x03 && tmp[7] == HIGH) {
+              etor_state[3] = "HIGH";
+            }
+            else if (tmp[3] == 0x04 && tmp[7] == LOW) {
+              etor_state[4] = "LOW";
+            }
+            else if (tmp[3] == 0x04 && tmp[7] == HIGH) {
+              etor_state[4] = "HIGH";
+            }
+            else if (tmp[3] == 0x05 && tmp[7] == LOW) {
+              etor_state[5] = "LOW";
+            }
+            else if (tmp[3] == 0x05 && tmp[7] == HIGH) {
+              etor_state[5] = "HIGH";
+            }
+          }
+        }
       }
     }
   }
