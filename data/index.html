@@ -87,7 +87,7 @@
 		</table>
 		<h3>User trame :</h3>
 		<form>
-			<input type="text" maxlength="16" id="trame">
+			<input type="text" maxlength="16" id="trame" pattern="[A-F0-9]{16}" placeholder="8 bytes (Hex)">
 			<input type="button" value="Send" onclick=changeLocation(trame.value)>
 		</form>
 		<script>

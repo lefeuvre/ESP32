@@ -2,18 +2,6 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
-typedef enum
-{
-  LED_NONE    = (uint8_t)0,
-  LED_RED     = (uint8_t)1,
-  LED_GREEN   = (uint8_t)2,
-  LED_YELLOW  = (uint8_t)3,
-  LED_BLUE    = (uint8_t)4,
-  LED_PURPLE  = (uint8_t)5,
-  LED_CYAN    = (uint8_t)6,
-  LED_WHITE   = (uint8_t)7,
-} LedColor;
-
 const char* ssid = "OICore-ESP32-AP";
 const char* password = "123456789";
 
@@ -23,10 +11,14 @@ IPAddress subnet(255,255,255,0);
 
 AsyncWebServer server(80);
 
+
+
 String cmd_led = "LED_NONE";
 String cmd_stor[4] = {"HIGH", "HIGH", "HIGH", "HIGH"};
 String etor_state[6] = {"-", "-", "-", "-", "-", "-"};
 String an_value[2] = {"-", "-"};
+
+
 
 String processor(const String& var){
   if (var == "LED_NONE" && cmd_led == "LED_NONE")
@@ -81,6 +73,8 @@ String processor(const String& var){
     return String();
 }
 
+
+
 uint16_t calculChecksum(uint8_t* buf, uint8_t len) {
   uint16_t checksum = 0;
   if (buf != NULL) {
@@ -90,6 +84,8 @@ uint16_t calculChecksum(uint8_t* buf, uint8_t len) {
   }
   return checksum;
 }
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -218,7 +214,25 @@ void setup() {
         val = request->getParam("v")->value();
       }
       if (val.length() == 16) {
-        // Convert string to uint8_t array        
+        byte tmp[17] = {0};        
+        val.getBytes(tmp, 17);
+
+        // Convert String to uint8_t array
+        for (int i=0; i<8; i++) {
+          if (tmp[i*2] >= 48 && tmp[i*2] <= 57) {
+            buf[i+2] |= (uint8_t)((tmp[i*2] - 48) << 4);
+          }
+          else if (tmp[i*2] >= 65 && tmp[i*2] <= 70) {
+            buf[i+2] |= (uint8_t)((tmp[i*2] - 55) << 4);
+          }
+          
+          if (tmp[(i*2)+1] >= 48 && tmp[(i*2)+1] <= 57) {
+            buf[i+2] |= (uint8_t)(tmp[(i*2)+1] - 48);
+          }
+          else if (tmp[(i*2)+1] >= 65 && tmp[(i*2)+1] <= 70) {
+            buf[i+2] |= (uint8_t)(tmp[(i*2)+1] - 55);
+          } 
+        }
       }
     }
 
@@ -236,6 +250,8 @@ void setup() {
   
   server.begin();
 }
+
+
 
 void loop(){
   uint8_t tmp[8] = {0};
