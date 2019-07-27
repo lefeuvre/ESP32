@@ -15,7 +15,7 @@ AsyncWebServer server(80);
 
 String cmd_led = "LED_NONE";
 String cmd_stor[4] = {"HIGH", "HIGH", "HIGH", "HIGH"};
-String etor_state[6] = {"-", "-", "-", "-", "-", "-"};
+String etor_state[4] = {"-", "-", "-", "-"};
 String an_value[2] = {"-", "-"};
 
 
@@ -61,10 +61,6 @@ String processor(const String& var){
     return etor_state[2];
   else if (var == "ETOR4_STATE")
     return etor_state[3];
-  else if (var == "ETOR5_STATE")
-    return etor_state[4];
-  else if (var == "ETOR6_STATE")
-    return etor_state[5];
   else if (var == "AN1_VALUE")
     return an_value[0];
   else if (var == "AN2_VALUE")
@@ -289,22 +285,10 @@ void loop(){
             else if (tmp[3] == 0x03 && tmp[7] == 0x01) {
               etor_state[3] = "HIGH";
             }
-            else if (tmp[3] == 0x04 && tmp[7] == 0x00) {
-              etor_state[4] = "LOW";
-            }
-            else if (tmp[3] == 0x04 && tmp[7] == 0x01) {
-              etor_state[4] = "HIGH";
-            }
-            else if (tmp[3] == 0x05 && tmp[7] == 0x00) {
-              etor_state[5] = "LOW";
-            }
-            else if (tmp[3] == 0x05 && tmp[7] == 0x01) {
-              etor_state[5] = "HIGH";
-            }
-            else if (tmp[3] == 0x06) {
+            else if (tmp[3] == 0x00) {
               an_value[0] = String((tmp[4] << 24) | (tmp[5] << 16) | (tmp[6] << 8) | tmp[7]);
             }
-            else if (tmp[3] == 0x07) {
+            else if (tmp[3] == 0x01) {
               an_value[1] = String((tmp[4] << 24) | (tmp[5] << 16) | (tmp[6] << 8) | tmp[7]);
             }
           }
