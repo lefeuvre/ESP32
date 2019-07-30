@@ -285,10 +285,10 @@ void loop(){
             else if (tmp[3] == 0x03 && tmp[7] == 0x01) {
               etor_state[3] = "HIGH";
             }
-            else if (tmp[3] == 0x00) {
+            else if (tmp[3] == 0x0B) {
               an_value[0] = String((tmp[4] << 24) | (tmp[5] << 16) | (tmp[6] << 8) | tmp[7]);
             }
-            else if (tmp[3] == 0x01) {
+            else if (tmp[3] == 0x0C) {
               an_value[1] = String((tmp[4] << 24) | (tmp[5] << 16) | (tmp[6] << 8) | tmp[7]);
             }
           }
